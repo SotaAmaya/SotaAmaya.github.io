@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>女川にいる気分になれる地図</title>
+  </head>
+  <body>
+    <h1>女川にいる気分になれる地図</h1>
+    <div id="currentPoint"></div>
+    <div id="map" style="width:100%; height: 80%"></div>
+    <script type="text/javascript">
+      function initMap() {
+        if ( !navigator.geolocation ) {
+          alert("位置情報を取得できません");
+          return;
+        }
+        navigator.geolocation.getCurrentPosition( afterLoadPos );
+      }
+
+      function afterLoadPos( position ) {
+        console.log( "現在地:" + position.coords.latitude + " / " + position.coords.longitude );
+
+        // ベース地点（自宅）
+        var baseLat = 35.7614978;
+        var baseLng = 139.8317392;
+
+        // ターゲットとする地点（女川駅）
+        var targetLat = 38.44675;
+        var targetLng = 141.443995;
+
+        // 現在地
+        var nowLat = position.coords.latitude;
+        var nowLng = position.coords.longitude;
+
+        // ベース地点と現在地の緯度経度差
+        var diffLat = nowLat - baseLat;
+        var diffLng = nowLng - baseLng;
+
+        // ターゲット地点に緯度経度差を足す
+        var curLat = targetLat + diffLat;
+        var curLng = targetLng + diffLng;
+
+        var cur = new google.maps.LatLng( curLat, curLng );
+
+        var map = new google.maps.Map(
+          document.getElementById("map"),
+          {
+            zoom: 20,
+            center: cur
+          }
+        );
+
+        var marker = new google.maps.Marker({
+          map: map,
+          position: cur
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_Z-RovAY-0n7gwtti0NvJ1vGeZFg2tuY&callback=initMap"></script>
+  </body>
+</html>
